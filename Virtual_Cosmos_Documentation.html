@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Cosmos — Project Documentation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --primary-dark: #4f46e5;
+      --bg: #ffffff;
+      --text: #1e293b;
+      --text-secondary: #64748b;
+      --border: #e2e8f0;
+      --code-bg: #f1f5f9;
+      --accent-green: #22c55e;
+      --accent-orange: #f59e0b;
+      --accent-red: #ef4444;
+      --accent-cyan: #06b6d4;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      background: var(--bg);
+      font-size: 11pt;
+    }
+
+    @page {
+      size: A4;
+      margin: 20mm 18mm 25mm 18mm;
+    }
+
+    @media print {
+      body { font-size: 10pt; }
+      .page-break { page-break-before: always; }
+      .no-break { page-break-inside: avoid; }
+      h2, h3 { page-break-after: avoid; }
+    }
+
+    /* ── Cover Page ─────────────────────── */
+    .cover {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a3e 50%, #2a1a4e 100%);
+      color: white;
+      padding: 40px;
+    }
+    .cover-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #a855f7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 60px rgba(99, 102, 241, 0.4);
+    }
+    .cover h1 {
+      font-size: 42pt;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      margin-bottom: 8px;
+      background: linear-gradient(to right, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .cover .subtitle {
+      font-size: 16pt;
+      color: #94a3b8;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+    .cover-meta {
+      margin-top: 40px;
+      font-size: 10pt;
+      color: #64748b;
+      line-height: 2;
+    }
+    .cover-meta strong { color: #94a3b8; }
+
+    /* ── Content ────────────────────────── */
+    .content {
+      max-width: 750px;
+      margin: 0 auto;
+      padding: 40px 30px;
+    }
+
+    h2 {
+      font-size: 20pt;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-top: 50px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid var(--primary);
+      letter-spacing: -0.5px;
+    }
+
+    h3 {
+      font-size: 14pt;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 30px;
+      margin-bottom: 12px;
+    }
+
+    h4 {
+      font-size: 11pt;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    ul, ol {
+      margin-bottom: 14px;
+      padding-left: 24px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    /* ── Tables ─────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 10pt;
+    }
+    th {
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+    }
+    th:first-child { border-radius: 8px 0 0 0; }
+    th:last-child { border-radius: 0 8px 0 0; }
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+
+    /* ── Code blocks ───────────────────── */
+    pre {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-radius: 10px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      font-family: 'Fira Code', monospace;
+      font-size: 9pt;
+      line-height: 1.6;
+      margin: 14px 0;
+    }
+    code {
+      font-family: 'Fira Code', monospace;
+      font-size: 9pt;
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--primary-dark);
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    /* ── Info boxes ─────────────────────── */
+    .info-box {
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      border-left: 4px solid;
+    }
+    .info-box.blue {
+      background: #eff6ff;
+      border-color: #3b82f6;
+    }
+    .info-box.green {
+      background: #f0fdf4;
+      border-color: #22c55e;
+    }
+    .info-box.orange {
+      background: #fffbeb;
+      border-color: #f59e0b;
+    }
+    .info-box .box-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      font-size: 10pt;
+    }
+    .info-box.blue .box-title { color: #1d4ed8; }
+    .info-box.green .box-title { color: #15803d; }
+    .info-box.orange .box-title { color: #b45309; }
+
+    /* ── Diagram boxes ─────────────────── */
+    .diagram {
+      background: #f8fafc;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 20px 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 9pt;
+      line-height: 1.8;
+      white-space: pre;
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    /* ── Flow steps ────────────────────── */
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin: 14px 0;
+      padding: 14px 18px;
+      background: #f8fafc;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .flow-num {
+      min-width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .flow-content h4 {
+      margin: 0 0 4px;
+      color: var(--text);
+      font-size: 11pt;
+    }
+    .flow-content p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 10pt;
+    }
+
+    /* ── Badge ─────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 8.5pt;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-purple { background: #f3e8ff; color: #7c3aed; }
+    .badge-orange { background: #fef3c7; color: #b45309; }
+    .badge-red { background: #fee2e2; color: #dc2626; }
+
+    /* ── TOC ───────────────────────────── */
+    .toc {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 30px;
+      margin: 30px 0;
+    }
+    .toc h3 {
+      margin-top: 0;
+      color: var(--primary-dark);
+    }
+    .toc ol {
+      counter-reset: toc;
+      list-style: none;
+      padding-left: 0;
+    }
+    .toc > ol > li {
+      counter-increment: toc;
+      margin-bottom: 8px;
+    }
+    .toc > ol > li::before {
+      content: counter(toc) ".";
+      font-weight: 700;
+      color: var(--primary);
+      margin-right: 8px;
+    }
+    .toc a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+    }
+    .toc .sub {
+      padding-left: 28px;
+      font-size: 9.5pt;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* ── File tree ─────────────────────── */
+    .file-tree {
+      background: #1e293b;
+      color: #94a3b8;
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-family: 'Fira Code', monospace;
+      font-size: 9pt;
+      line-height: 1.8;
+      margin: 14px 0;
+    }
+    .file-tree .folder { color: #60a5fa; font-weight: 600; }
+    .file-tree .file { color: #e2e8f0; }
+    .file-tree .comment { color: #64748b; font-style: italic; }
+
+    .separator {
+      height: 1px;
+      background: var(--border);
+      margin: 40px 0;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 30px;
+      color: var(--text-secondary);
+      font-size: 9pt;
+      border-top: 1px solid var(--border);
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!-- COVER PAGE -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <div class="cover">
+    <div class="cover-icon">&#127760;</div>
+    <h1>Virtual Cosmos</h1>
+    <div class="subtitle">2D Proximity-Based Virtual Environment<br/>with Real-Time Chat</div>
+    <p style="color: #94a3b8; max-width: 500px; font-size: 11pt; line-height: 1.8;">
+      A full-stack multiplayer application where users navigate a 2D cosmos,
+      and chat rooms automatically connect and disconnect based on proximity —
+      simulating real-world spatial interaction in a virtual space.
+    </p>
+    <div class="cover-meta">
+      <strong>Technology:</strong> React &bull; PixiJS &bull; Socket.IO &bull; Node.js &bull; MongoDB<br/>
+      <strong>Type:</strong> Full-Stack Web Application<br/>
+      <strong>Date:</strong> April 2026<br/>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- TABLE OF CONTENTS -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="toc">
+      <h3>Table of Contents</h3>
+      <ol>
+        <li><a href="#overview">Project Overview &amp; Objectives</a></li>
+        <li><a href="#architecture">System Architecture</a>
+          <div class="sub">High-level design, data flow, client-server model</div>
+        </li>
+        <li><a href="#techstack">Technology Stack &amp; Justification</a></li>
+        <li><a href="#structure">Project Structure &amp; File Organization</a></li>
+        <li><a href="#backend">Backend — Detailed Breakdown</a>
+          <div class="sub">Server setup, Socket.IO events, proximity algorithm, MongoDB models</div>
+        </li>
+        <li><a href="#frontend">Frontend — Detailed Breakdown</a>
+          <div class="sub">PixiJS canvas, game loop, avatar rendering, camera system, React components</div>
+        </li>
+        <li><a href="#proximity">Proximity Detection — Core Logic</a>
+          <div class="sub">Algorithm, distance formula, connection lifecycle</div>
+        </li>
+        <li><a href="#chat">Chat System — Design &amp; Flow</a>
+          <div class="sub">Room management, message persistence, auto connect/disconnect</div>
+        </li>
+        <li><a href="#socket-events">Socket.IO Event Reference</a></li>
+        <li><a href="#database">Database Schema &amp; Design</a></li>
+        <li><a href="#userflow">User Experience Flow</a></li>
+        <li><a href="#ui">UI/UX Design Decisions</a></li>
+        <li><a href="#setup">Setup &amp; Running Instructions</a></li>
+        <li><a href="#config">Configuration Reference</a></li>
+        <li><a href="#security">Security Considerations</a></li>
+      </ol>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 1. PROJECT OVERVIEW -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <h2 id="overview">1. Project Overview &amp; Objectives</h2>
+
+    <h3>1.1 What is Virtual Cosmos?</h3>
+    <p>
+      Virtual Cosmos is a <strong>2D multiplayer virtual environment</strong> where users can move around
+      freely and interact with each other in real time. The core mechanic is <strong>proximity-based chat</strong>:
+    </p>
+    <ul>
+      <li><strong>When two users come close</strong> (within a 150-pixel radius) → a chat channel automatically connects between them</li>
+      <li><strong>When users move apart</strong> (beyond the radius) → the chat channel automatically disconnects</li>
+    </ul>
+    <p>
+      This simulates real-world spatial interaction — just like in a physical room, you can only talk to
+      people who are near you. The experience is similar to platforms like <em>Gather.town</em> or <em>Cosmos.video</em>.
+    </p>
+
+    <h3>1.2 Objectives</h3>
+    <p>The project demonstrates competency across four key engineering areas:</p>
+
+    <table>
+      <tr>
+        <th>Area</th>
+        <th>What's Evaluated</th>
+        <th>How It's Addressed</th>
+      </tr>
+      <tr>
+        <td><strong>Frontend Skills</strong></td>
+        <td>Canvas rendering, movement, UI/UX quality</td>
+        <td>PixiJS 2D rendering engine, React component architecture, Tailwind styling, smooth 60fps game loop</td>
+      </tr>
+      <tr>
+        <td><strong>Real-Time Logic</strong></td>
+        <td>Proximity detection algorithm</td>
+        <td>Server-side Euclidean distance calculation with O(n) per-move checking, automatic room join/leave</td>
+      </tr>
+      <tr>
+        <td><strong>Backend Fundamentals</strong></td>
+        <td>User state, WebSocket management</td>
+        <td>Express + Socket.IO server, in-memory player state, MongoDB persistence for users and messages</td>
+      </tr>
+      <tr>
+        <td><strong>System Design</strong></td>
+        <td>Architecture, scalability thinking</td>
+        <td>Clean separation of concerns, event-driven architecture, stateless REST + stateful WebSocket hybrid</td>
+      </tr>
+    </table>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 2. SYSTEM ARCHITECTURE -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="page-break"></div>
+    <h2 id="architecture">2. System Architecture</h2>
+
+    <h3>2.1 High-Level Architecture</h3>
+    <p>The system follows a <strong>client-server model</strong> with WebSocket-based real-time communication:</p>
+
+    <div class="diagram">
+┌─────────────────────────────────────────────────────────────────┐
+│                        CLIENT (Browser)                         │
+│                                                                 │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
+│  │  Join Screen  │  │   PixiJS     │  │    Chat Panel        │  │
+│  │  (React)      │→ │   Canvas     │  │    (React)           │  │
+│  │              │  │  (Game Loop)  │  │  - Auto connect      │  │
+│  └──────────────┘  │  - Avatars    │  │  - Auto disconnect   │  │
+│                    │  - Movement   │  │  - Message history   │  │
+│                    │  - Camera     │  │  - Tabbed multi-chat │  │
+│                    └───────┬───────┘  └──────────┬───────────┘  │
+│                            │                      │              │
+│                    ┌───────┴──────────────────────┴───────┐      │
+│                    │         Socket.IO Client              │      │
+│                    └───────────────────┬──────────────────┘      │
+└────────────────────────────────────────┼────────────────────────┘
+                                         │  WebSocket (ws://)
+                                         │
+┌────────────────────────────────────────┼────────────────────────┐
+│                        SERVER (Node.js)│                        │
+│                    ┌───────────────────┴──────────────────┐     │
+│                    │         Socket.IO Server              │     │
+│                    └───────────────────┬──────────────────┘     │
+│                                        │                        │
+│  ┌──────────────┐  ┌──────────────────┴────────────────────┐   │
+│  │   Express     │  │          Game Logic Engine             │   │
+│  │   REST API    │  │                                        │   │
+│  │  /api/health  │  │  - Player state (Map)                  │   │
+│  │  /api/online  │  │  - Position tracking                   │   │
+│  └──────────────┘  │  - Proximity detection algorithm        │   │
+│                    │  - Room management (Set)                │   │
+│                    │  - Chat routing                         │   │
+│                    └──────────────────┬─────────────────────┘   │
+│                                       │                         │
+│                    ┌──────────────────┴─────────────────────┐   │
+│                    │            MongoDB (Mongoose)            │   │
+│                    │  ┌─────────────┐  ┌─────────────────┐  │   │
+│                    │  │  Users       │  │  Messages        │  │   │
+│                    │  │  Collection  │  │  Collection      │  │   │
+│                    │  └─────────────┘  └─────────────────┘  │   │
+│                    └─────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘</div>
+
+    <h3>2.2 Data Flow</h3>
+    <p>There are three primary data flows in the system:</p>
+
+    <div class="info-box blue no-break">
+      <div class="box-title">Flow 1: Position Synchronization</div>
+      <p>Client captures keyboard input → calculates new position → emits <code>player:move</code> to server
+      → server updates in-memory state → broadcasts <code>player:moved</code> to all other clients
+      → other clients update the PixiJS sprite position.</p>
+    </div>
+
+    <div class="info-box green no-break">
+      <div class="box-title">Flow 2: Proximity Detection</div>
+      <p>On every <code>player:move</code> event, the server iterates through all active players, calculates
+      Euclidean distance. If distance &lt; 150px and not already connected → joins both sockets to a shared
+      room and emits <code>chat:connected</code>. If distance ≥ 150px and currently connected → removes from
+      room and emits <code>chat:disconnected</code>.</p>
+    </div>
+
+    <div class="info-box orange no-break">
+      <div class="box-title">Flow 3: Chat Messaging</div>
+      <p>When connected, client sends <code>chat:message</code> with room ID and content → server persists
+      to MongoDB → broadcasts the message to all sockets in that room → both clients display the message
+      in their chat panels.</p>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 3. TECH STACK -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="page-break"></div>
+    <h2 id="techstack">3. Technology Stack &amp; Justification</h2>
+
+    <h3>3.1 Frontend Technologies</h3>
+    <table>
+      <tr>
+        <th>Technology</th>
+        <th>Version</th>
+        <th>Purpose</th>
+        <th>Why This Choice</th>
+      </tr>
+      <tr>
+        <td><strong>React</strong></td>
+        <td>19.x</td>
+        <td>UI framework</td>
+        <td>Component-based architecture, excellent for managing UI state (chat panels, HUD). Hooks enable clean integration with PixiJS and Socket.IO lifecycles.</td>
+      </tr>
+      <tr>
+        <td><strong>Vite</strong></td>
+        <td>8.x</td>
+        <td>Build tool &amp; dev server</td>
+        <td>Instant HMR for fast development. Native ES modules. Built-in proxy for API/WebSocket forwarding to backend during development.</td>
+      </tr>
+      <tr>
+        <td><strong>PixiJS</strong></td>
+        <td>7.x</td>
+        <td>2D canvas rendering</td>
+        <td>WebGL-accelerated 2D rendering. Hardware-accelerated graphics for smooth avatar rendering, particle effects, and large world with many players. Much more performant than DOM-based rendering for game-like interactions.</td>
+      </tr>
+      <tr>
+        <td><strong>Tailwind CSS</strong></td>
+        <td>4.x</td>
+        <td>UI styling</td>
+        <td>Utility-first approach enables rapid UI development. No context-switching between files. Consistent design system with minimal CSS footprint.</td>
+      </tr>
+      <tr>
+        <td><strong>Socket.IO Client</strong></td>
+        <td>4.x</td>
+        <td>WebSocket client</td>
+        <td>Matched with server-side Socket.IO. Automatic reconnection, fallback to polling, room abstraction built-in.</td>
+      </tr>
+    </table>
+
+    <h3>3.2 Backend Technologies</h3>
+    <table>
+      <tr>
+        <th>Technology</th>
+        <th>Version</th>
+        <th>Purpose</th>
+        <th>Why This Choice</th>
+      </tr>
+      <tr>
+        <td><strong>Node.js</strong></td>
+        <td>18+</td>
+        <td>Runtime</td>
+        <td>Event-driven, non-blocking I/O — ideal for real-time WebSocket applications handling many concurrent connections. Same language as frontend (JavaScript) reduces context switching.</td>
+      </tr>
+      <tr>
+        <td><strong>Express</strong></td>
+        <td>5.x</td>
+        <td>HTTP server</td>
+        <td>Lightweight, mature framework. Provides REST endpoints for health checks and online player queries. Pairs cleanly with Socket.IO.</td>
+      </tr>
+      <tr>
+        <td><strong>Socket.IO</strong></td>
+        <td>4.x</td>
+        <td>Real-time engine</td>
+        <td>Room-based architecture maps perfectly to proximity chat pairs. Built-in broadcast, room join/leave, automatic reconnection handling. Fallback to long-polling ensures reliability.</td>
+      </tr>
+      <tr>
+        <td><strong>MongoDB</strong></td>
+        <td>Atlas/Local</td>
+        <td>Database</td>
+        <td>Flexible schema for user profiles and chat messages. Document model suits our data (messages are self-contained documents). Mongoose ODM provides validation and type safety.</td>
+      </tr>
+      <tr>
+        <td><strong>Mongoose</strong></td>
+        <td>9.x</td>
+        <td>MongoDB ODM</td>
+        <td>Schema validation, middleware hooks, and clean query API. Upsert support simplifies user creation/update.</td>
+      </tr>
+    </table>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 4. PROJECT STRUCTURE -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="page-break"></div>
+    <h2 id="structure">4. Project Structure &amp; File Organization</h2>
+
+    <div class="file-tree">
+<span class="folder">virtual-cosmos/</span>
+├── <span class="file">package.json</span>              <span class="comment"># Root-level scripts (dev, install:all, build)</span>
+├── <span class="file">README.md</span>                 <span class="comment"># Project documentation</span>
+├── <span class="file">.gitignore</span>                <span class="comment"># Git ignore rules</span>
+│
+├── <span class="folder">server/</span>                   <span class="comment"># ── BACKEND ──────────────────────────</span>
+│   ├── <span class="file">index.js</span>              <span class="comment"># Main server: Express + Socket.IO + game logic</span>
+│   ├── <span class="file">package.json</span>          <span class="comment"># Server dependencies</span>
+│   ├── <span class="file">.env</span>                  <span class="comment"># Environment variables (PORT, MONGODB_URI)</span>
+│   └── <span class="folder">models/</span>
+│       ├── <span class="file">User.js</span>           <span class="comment"># Mongoose schema: username, position, color</span>
+│       └── <span class="file">Message.js</span>        <span class="comment"># Mongoose schema: sender, content, roomId</span>
+│
+└── <span class="folder">client/</span>                   <span class="comment"># ── FRONTEND ─────────────────────────</span>
+    ├── <span class="file">index.html</span>            <span class="comment"># Entry HTML with Google Fonts</span>
+    ├── <span class="file">vite.config.js</span>        <span class="comment"># Vite config with Tailwind + proxy</span>
+    ├── <span class="file">package.json</span>          <span class="comment"># Client dependencies</span>
+    └── <span class="folder">src/</span>
+        ├── <span class="file">main.jsx</span>          <span class="comment"># React DOM entry point</span>
+        ├── <span class="file">App.jsx</span>           <span class="comment"># Root component (Join → Cosmos routing)</span>
+        ├── <span class="file">index.css</span>         <span class="comment"># Tailwind imports + global styles</span>
+        ├── <span class="file">socket.js</span>         <span class="comment"># Socket.IO client singleton</span>
+        ├── <span class="file">constants.js</span>      <span class="comment"># Shared config (world size, speed, radius)</span>
+        └── <span class="folder">components/</span>
+            ├── <span class="file">JoinScreen.jsx</span> <span class="comment"># Username entry + avatar preview</span>
+            ├── <span class="file">Cosmos.jsx</span>     <span class="comment"># Main canvas: PixiJS + game loop + sockets</span>
+            ├── <span class="file">ChatPanel.jsx</span>  <span class="comment"># Auto-connecting chat with tabs</span>
+            └── <span class="file">HUD.jsx</span>        <span class="comment"># Heads-up display overlay</span></div>
+
+    <h3>4.1 Separation of Concerns</h3>
+    <table>
+      <tr>
+        <th>Layer</th>
+        <th>Files</th>
+        <th>Responsibility</th>
+      </tr>
+      <tr>
+        <td><strong>Configuration</strong></td>
+        <td><code>constants.js</code>, <code>.env</code></td>
+        <td>All tunable values (radius, speed, world size, ports) centralized</td>
+      </tr>
+      <tr>
+        <td><strong>Network</strong></td>
+        <td><code>socket.js</code>, <code>server/index.js</code></td>
+        <td>Socket.IO client/server setup, event handling</td>
+      </tr>
+      <tr>
+        <td><strong>Game Engine</strong></td>
+        <td><code>Cosmos.jsx</code> (client), <code>index.js</code> (server)</td>
+        <td>Rendering, movement, proximity detection, position sync</td>
+      </tr>
+      <tr>
+        <td><strong>Data</strong></td>
+        <td><code>models/User.js</code>, <code>models/Message.js</code></td>
+        <td>Database schemas and persistence</td>
+      </tr>
+      <tr>
+        <td><strong>UI</strong></td>
+        <td><code>JoinScreen</code>, <code>ChatPanel</code>, <code>HUD</code></td>
+        <td>User interface components, styled with Tailwind</td>
+      </tr>
+    </table>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 5. BACKEND DETAILED BREAKDOWN -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="page-break"></div>
+    <h2 id="backend">5. Backend — Detailed Breakdown</h2>
+
+    <h3>5.1 Server Setup (<code>server/index.js</code>)</h3>
+    <p>The server creates an HTTP server with Express, then attaches Socket.IO to it:</p>
+    <pre><code>const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    methods: ['GET', 'POST'],
+  },
+});</code></pre>
+    <p>
+      <strong>CORS</strong> is configured to accept connections from the Vite dev server. In production,
+      this would be set to the deployed frontend URL.
+    </p>
+
+    <h3>5.2 In-Memory State Management</h3>
+    <p>The server maintains two critical data structures in memory for real-time performance:</p>
+
+    <pre><code>// Map: socketId → { userId, username, x, y, avatarColor }
+const activePlayers = new Map();
+
+// Set of active chat connections: "socketId1::socketId2" (sorted)
+const activeConnections = new Set();</code></pre>
+
+    <div class="info-box blue no-break">
+      <div class="box-title">Why In-Memory?</div>
+      <p>Database queries on every position update (potentially 30 times/second/player) would create
+      unacceptable latency. The in-memory Map provides O(1) lookups for player positions. MongoDB is
+      used only for <em>persistence</em> (user profiles and chat history), not real-time state.</p>
+    </div>
+
+    <h4>activePlayers Map Structure</h4>
+    <table>
+      <tr><th>Key</th><th>Type</th><th>Description</th></tr>
+      <tr><td><code>socketId</code></td><td>String (Map key)</td><td>Unique Socket.IO connection identifier</td></tr>
+      <tr><td><code>userId</code></td><td>String</td><td>Same as socketId (derived from connection)</td></tr>
+      <tr><td><code>username</code></td><td>String</td><td>Player's chosen display name</td></tr>
+      <tr><td><code>x</code></td><td>Number</td><td>Current X position in the 2D world</td></tr>
+      <tr><td><code>y</code></td><td>Number</td><td>Current Y position in the 2D world</td></tr>
+      <tr><td><code>avatarColor</code></td><td>String (hex)</td><td>Avatar color (e.g., "#6366f1")</td></tr>
+    </table>
+
+    <h4>activeConnections Set Structure</h4>
+    <p>Each entry is a string in the format <code>"socketId1::socketId2"</code>, where the IDs are <strong>alphabetically sorted</strong>.
+    This ensures a consistent key regardless of which player moved — <code>getRoomId("abc", "xyz")</code> and <code>getRoomId("xyz", "abc")</code> both return <code>"abc::xyz"</code>.</p>
+    <pre><code>function getRoomId(id1, id2) {
+  return [id1, id2].sort().join('::');
+}</code></pre>
+
+    <h3>5.3 Player Lifecycle Events</h3>
+
+    <h4>player:join — User Enters the Cosmos</h4>
+    <pre><code>socket.on('player:join', async (data) => {
+  const { username, avatarColor } = data;
+
+  // Random spawn position within world bounds
+  const x = 100 + Math.random() * 1800;
+  const y = 100 + Math.random() * 800;
+
+  // Store in memory
+  activePlayers.set(socket.id, { userId: socket.id, username, x, y, avatarColor });
+
+  // Persist to MongoDB (upsert = create or update)
+  await User.findOneAndUpdate(
+    { username },
+    { avatarColor, lastPosition: { x, y }, lastActive: new Date() },
+    { upsert: true, new: true }
+  );
+
+  // Send current state to joining player
+  socket.emit('player:current', Object.fromEntries(activePlayers));
+
+  // Notify all other players
+  socket.broadcast.emit('player:joined', { socketId: socket.id, ...playerData });
+
+  // Check if spawned near anyone
+  checkProximity(socket.id);
+});</code></pre>
+
+    <h4>player:move — Position Update</h4>
+    <pre><code>socket.on('player:move', (data) => {
+  const player = activePlayers.get(socket.id);
+  if (!player) return;
+
+  player.x = data.x;
+  player.y = data.y;
+
+  // Broadcast to everyone else
+  socket.broadcast.emit('player:moved', { socketId: socket.id, x: data.x, y: data.y });
+
+  // Re-evaluate all proximity relationships
+  checkProximity(socket.id);
+});</code></pre>
+
+    <h4>disconnect — User Leaves</h4>
+    <p>When a player disconnects, the server:</p>
+    <ol>
+      <li>Finds and removes all active chat connections involving this player</li>
+      <li>Notifies the other side of each connection with <code>chat:disconnected</code></li>
+      <li>Saves the player's last position to MongoDB</li>
+      <li>Removes the player from the in-memory Map</li>
+      <li>Broadcasts <code>player:left</code> to all remaining players</li>
+    </ol>
+
+    <h3>5.4 REST API Endpoints</h3>
+    <table>
+      <tr><th>Endpoint</th><th>Method</th><th>Response</th><th>Purpose</th></tr>
+      <tr>
+        <td><code>/api/health</code></td>
+        <td>GET</td>
+        <td><code>{ status: "ok", players: N }</code></td>
+        <td>Health check, useful for monitoring &amp; load balancers</td>
+      </tr>
+      <tr>
+        <td><code>/api/online</code></td>
+        <td>GET</td>
+        <td>Array of <code>{ socketId, username, avatarColor }</code></td>
+        <td>List currently online players (useful for lobby UIs)</td>
+      </tr>
+    </table>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 6. FRONTEND DETAILED BREAKDOWN -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="page-break"></div>
+    <h2 id="frontend">6. Frontend — Detailed Breakdown</h2>
+
+    <h3>6.1 Application Entry Flow</h3>
+    <p>The React application manages two states:</p>
+    <pre><code>// App.jsx — Root component
+export default function App() {
+  const [user, setUser] = useState(null);
+
+  if (!user) return &lt;JoinScreen onJoin={setUser} /&gt;;
+
+  return &lt;Cosmos username={user.username} avatarColor={user.avatarColor} /&gt;;
+}</code></pre>
+    <p><code>user === null</code> → Show the Join Screen. Once the user submits a name → render the Cosmos.</p>
+
+    <h3>6.2 JoinScreen Component</h3>
+    <p>The entry screen provides:</p>
+    <ul>
+      <li><strong>Username input</strong> — with 20-character limit and autofocus</li>
+      <li><strong>Avatar preview</strong> — shows the randomly assigned color with the user's first initial</li>
+      <li><strong>Control hints</strong> — informs users about WASD/Arrow key movement</li>
+      <li><strong>Form validation</strong> — submit button disabled until a non-empty username is entered</li>
+    </ul>
+    <p>The avatar color is randomly assigned from a curated palette of 10 visually distinct colors defined in <code>constants.js</code>.</p>
+
+    <h3>6.3 Cosmos Component — The Core Engine</h3>
+    <p>This is the most complex component, integrating PixiJS rendering, keyboard input, Socket.IO events, and camera control. It runs within a single <code>useEffect</code> that manages the full lifecycle.</p>
+
+    <h4>6.3.1 PixiJS Application Setup</h4>
+    <pre><code>const app = new PIXI.Application({
+  width: window.innerWidth,
+  height: window.innerHeight,
+  backgroundColor: 0x0f0f1a,    // Dark cosmos background
+  antialias: true,               // Smooth edges
+  resolution: window.devicePixelRatio || 1,  // Retina support
+  autoDensity: true,
+});</code></pre>
+    <p>The PIXI application renders to a WebGL canvas. A <strong>world container</strong> holds all game objects (grid, stars, avatars) and is moved to implement camera following.</p>
+
+    <h4>6.3.2 World Layers (Rendering Order)</h4>
+    <table>
+      <tr><th>Layer</th><th>Z-Order</th><th>Content</th></tr>
+      <tr><td>Stars</td><td>Bottom</td><td>200 randomly placed semi-transparent white dots — creates a cosmic atmosphere</td></tr>
+      <tr><td>Grid</td><td>Middle</td><td>60px-spaced grid lines with subtle opacity — provides spatial reference and depth</td></tr>
+      <tr><td>Avatars</td><td>Top</td><td>Player circles with glow, initials, name labels, and (for local player) proximity ring</td></tr>
+    </table>
+
+    <h4>6.3.3 Avatar Rendering</h4>
+    <p>Each avatar is a PixiJS Container with multiple layered elements:</p>
+    <pre><code>Avatar Container
+├── Proximity Ring (local player only)
+│   ├── Filled circle: radius=150px, color=avatarColor, alpha=0.03
+│   └── Dashed ring: 36 arc segments, alpha=0.25
+├── Glow: circle, radius=30px, avatarColor, alpha=0.15
+├── Main Circle: radius=22px, solid avatarColor, white border
+├── Initial Letter: centered "A" in white, bold, 18px
+└── Name Label: below avatar, 11px, white with drop shadow</code></pre>
+
+    <h4>6.3.4 Keyboard Input &amp; Movement</h4>
+    <p>Input uses a <code>Set</code> to track currently pressed keys, allowing simultaneous key presses (diagonal movement):</p>
+    <pre><code>// In the game loop (ticker callback):
+const keys = keysRef.current;
+let dx = 0, dy = 0;
+
+if (keys.has('w') || keys.has('arrowup'))    dy -= MOVE_SPEED;
+if (keys.has('s') || keys.has('arrowdown'))  dy += MOVE_SPEED;
+if (keys.has('a') || keys.has('arrowleft'))  dx -= MOVE_SPEED;
+if (keys.has('d') || keys.has('arrowright')) dx += MOVE_SPEED;
+
+// Diagonal normalization: prevents faster diagonal movement
+if (dx !== 0 && dy !== 0) {
+  const factor = Math.SQRT1_2;  // ≈ 0.707
+  dx *= factor;
+  dy *= factor;
+}</code></pre>
+
+    <div class="info-box green no-break">
+      <div class="box-title">Diagonal Normalization</div>
+      <p>Without normalization, moving diagonally (pressing W+D) would result in a speed of
+      √(4² + 4²) ≈ 5.66px/frame — 41% faster than cardinal movement. Multiplying by √(1/2) ≈ 0.707
+      brings diagonal speed back to exactly 4px/frame, ensuring uniform movement speed in all directions.</p>
+    </div>
+
+    <h4>6.3.5 Camera System</h4>
+    <pre><code>// Smooth camera follow with lerp (linear interpolation)
+const targetX = -localPosRef.current.x + window.innerWidth / 2;
+const targetY = -localPosRef.current.y + window.innerHeight / 2;
+world.x += (targetX - world.x) * 0.1;  // 10% lerp factor
+world.y += (targetY - world.y) * 0.1;</code></pre>
+    <p>
+      The camera doesn't jump to the player position — it smoothly interpolates at 10% per frame,
+      creating a fluid following effect. The world container itself is translated (the viewport
+      stays fixed), so the local player always appears near the center of the screen.
+    </p>
+
+    <h4>6.3.6 Position Emit Throttling</h4>
+    <pre><code>// Throttle to ~30fps (33ms intervals)
+const now = Date.now();
+if (now - lastEmit > 33) {
+  socket.emit('player:move', { x: newX, y: newY });
+  lastEmit = now;
+}</code></pre>
+    <p>While the game loop runs at 60fps, network position updates are throttled to ~30fps. This reduces
+    bandwidth by 50% while remaining visually smooth, since remote avatars are updated at each received
+    position rather than interpolated.</p>
+
+    <h3>6.4 ChatPanel Component</h3>
+    <p>The chat panel provides:</p>
+    <ul>
+      <li><strong>Auto-selection</strong> — automatically selects the first active chat when connections change</li>
+      <li><strong>Tabbed interface</strong> — when connected to multiple nearby users, tabs allow switching between conversations</li>
+      <li><strong>Message bubbles</strong> — own messages align right (indigo), others align left (dark gray)</li>
+      <li><strong>Auto-scroll</strong> — always scrolls to the latest message</li>
+      <li><strong>Connection notice</strong> — shows "Connected with [name]" when a chat begins</li>
+      <li><strong>Timestamps</strong> — each message shows HH:MM format</li>
+      <li><strong>Minimize button</strong> — can minimize the panel; a floating button shows active chat count</li>
+    </ul>
+
+    <h3>6.5 HUD Component</h3>
+    <p>The heads-up display provides at-a-glance information:</p>
+    <ul>
+      <li><strong>Top-left:</strong> Username with green "online" indicator</li>
+      <li><strong>Top-center:</strong> "VIRTUAL COSMOS" title with gradient</li>
+      <li><strong>Top-right:</strong> Online player count + active chat connections count</li>
+      <li><strong>Bottom-left:</strong> Control hints (WASD), proximity zone legend, current coordinates</li>
+    </ul>
+    <p>All HUD elements use <code>pointer-events-none</code> on the container to prevent them from intercepting canvas clicks, with <code>pointer-events-auto</code> on interactive elements.</p>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 7. PROXIMITY DETECTION -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="page-break"></div>
+    <h2 id="proximity">7. Proximity Detection — Core Logic</h2>
+
+    <h3>7.1 The Algorithm</h3>
+    <p>Proximity detection is the <strong>core mechanic</strong> of Virtual Cosmos. It runs on the server to
+    prevent cheating and ensure consistency. The algorithm executes every time any player moves.</p>
+
+    <pre><code>const PROXIMITY_RADIUS = 150; // pixels
+
+function getDistance(a, b) {
+  return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+}
+
+function checkProximity(movedSocketId) {
+  const movedPlayer = activePlayers.get(movedSocketId);
+  if (!movedPlayer) return;
+
+  for (const [otherSocketId, otherPlayer] of activePlayers) {
+    if (otherSocketId === movedSocketId) continue;
+
+    const dist = getDistance(movedPlayer, otherPlayer);
+    const roomId = getRoomId(movedSocketId, otherSocketId);
+    const isConnected = activeConnections.has(roomId);
+
+    if (dist < PROXIMITY_RADIUS && !isConnected) {
+      // ── CONNECT ──
+      activeConnections.add(roomId);
+      // Join both sockets to shared Socket.IO room
+      io.sockets.sockets.get(movedSocketId)?.join(roomId);
+      io.sockets.sockets.get(otherSocketId)?.join(roomId);
+      // Load chat history from MongoDB and notify both clients
+      // ... emit 'chat:connected' to both
+    }
+    else if (dist >= PROXIMITY_RADIUS && isConnected) {
+      // ── DISCONNECT ──
+      activeConnections.delete(roomId);
+      // Remove both from the room
+      io.sockets.sockets.get(movedSocketId)?.leave(roomId);
+      io.sockets.sockets.get(otherSocketId)?.leave(roomId);
+      // Notify both clients
+      // ... emit 'chat:disconnected' to both
+    }
+  }
+}</code></pre>
+
+    <h3>7.2 Distance Formula</h3>
+    <p>The Euclidean distance formula is used:</p>
+    <div class="diagram" style="font-size: 12pt;">
+d = √( (x₂ - x₁)² + (y₂ - y₁)² )
+
+Example:
+  Player A at (200, 300)
+  Player B at (300, 350)
+  d = √( (300-200)² + (350-300)² )
+  d = √( 10000 + 2500 )
+  d = √12500
+  d ≈ 111.8 pixels
+
+  111.8 < 150 → CONNECTED ✓</div>
+
+    <h3>7.3 Connection State Machine</h3>
+    <div class="diagram">
+                    ┌─────────────┐
+                    │ DISCONNECTED │
+                    │  (default)   │
+                    └──────┬──────┘
+                           │
+              distance < 150px
+                           │
+                    ┌──────▼──────┐
+                    │  CONNECTED   │ ←── Chat room created
+                    │  (chatting)  │     Messages flow
+                    └──────┬──────┘
+                           │
+              distance ≥ 150px
+              OR player disconnects
+                           │
+                    ┌──────▼──────┐
+                    │ DISCONNECTED │ ←── Chat room destroyed
+                    │  (default)   │     Chat panel hides
+                    └─────────────┘</div>
+
+    <h3>7.4 Complexity Analysis</h3>
+    <table>
+      <tr><th>Metric</th><th>Value</th><th>Notes</th></tr>
+      <tr>
+        <td><strong>Per-move check</strong></td>
+        <td>O(n)</td>
+        <td>Iterates through all other players. For n=100 players, that's 99 distance calculations per move.</td>
+      </tr>
+      <tr>
+        <td><strong>Distance calc</strong></td>
+        <td>O(1)</td>
+        <td>Two subtractions, two multiplications, one addition, one sqrt.</td>
+      </tr>
+      <tr>
+        <td><strong>Connection lookup</strong></td>
+        <td>O(1)</td>
+        <td>Set.has() on the roomId string — hash-based constant time.</td>
+      </tr>
+      <tr>
+        <td><strong>Total per move</strong></td>
+        <td>O(n)</td>
+        <td>Scales linearly with player count. Efficient for hundreds of players.</td>
+      </tr>
+    </table>
+
+    <h3>7.5 Visual Representation</h3>
+    <p>On the client, the local player's proximity radius is visualized as:</p>
+    <ul>
+      <li>A <strong>semi-transparent filled circle</strong> (3% opacity) showing the detection zone</li>
+      <li>A <strong>dashed ring border</strong> (25% opacity) at the exact radius boundary</li>
+    </ul>
+    <p>This provides clear visual feedback so users understand when they're about to connect or disconnect.</p>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 8. CHAT SYSTEM -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="page-break"></div>
+    <h2 id="chat">8. Chat System — Design &amp; Flow</h2>
+
+    <h3>8.1 Room-Based Architecture</h3>
+    <p>Chat rooms are managed using Socket.IO's built-in room system. Each pair of connected players
+    gets a unique room ID:</p>
+
+    <pre><code>// Room ID = sorted socket IDs joined with "::"
+// e.g., "abc123::xyz789"
+const roomId = getRoomId(socketId1, socketId2);
+
+// Join both players to the room
+io.sockets.sockets.get(socketId1)?.join(roomId);
+io.sockets.sockets.get(socketId2)?.join(roomId);
+
+// Messages sent to the room reach both players
+io.to(roomId).emit('chat:message', message);</code></pre>
+
+    <h3>8.2 Connection Lifecycle</h3>
+
+    <div class="flow-step no-break">
+      <div class="flow-num">1</div>
+      <div class="flow-content">
+        <h4>Proximity Detected (server-side)</h4>
+        <p>Distance check triggers. Both socket IDs are joined to a shared room. The server loads the last 50 messages from MongoDB for this room ID.</p>
+      </div>
+    </div>
+    <div class="flow-step no-break">
+      <div class="flow-num">2</div>
+      <div class="flow-content">
+        <h4>chat:connected emitted to both clients</h4>
+        <p>Each client receives: peer's name, color, socket ID, room ID, and message history array. The ChatPanel component adds this to its <code>chats</code> Map state.</p>
+      </div>
+    </div>
+    <div class="flow-step no-break">
+      <div class="flow-num">3</div>
+      <div class="flow-content">
+        <h4>Chat Panel Appears</h4>
+        <p>React re-renders. The ChatPanel detects <code>chats.size > 0</code> and renders. If multiple chats exist, tabs appear for each connected peer.</p>
+      </div>
+    </div>
+    <div class="flow-step no-break">
+      <div class="flow-num">4</div>
+      <div class="flow-content">
+        <h4>Messaging</h4>
+        <p>User types a message → client emits <code>chat:message { roomId, content }</code> → server persists to MongoDB → server broadcasts to the room → both clients display the message.</p>
+      </div>
+    </div>
+    <div class="flow-step no-break">
+      <div class="flow-num">5</div>
+      <div class="flow-content">
+        <h4>Proximity Lost (server-side)</h4>
+        <p>Distance check triggers disconnect. Both sockets leave the room. <code>chat:disconnected</code> emitted. Client removes the peer from the <code>chats</code> Map. If no chats remain, the panel hides.</p>
+      </div>
+    </div>
+
+    <h3>8.3 Message Persistence</h3>
+    <pre><code>// server/models/Message.js
+const messageSchema = new mongoose.Schema({
+  sender: String,           // Username of sender
+  senderColor: String,      // Hex color for display
+  content: String,          // Message text
+  roomId: String,           // Indexed — for quick history lookup
+  timestamp: { type: Date, default: Date.now },
+});</code></pre>
+    <p>When a chat connects, the server queries the last 50 messages for that room and sends them as history. This means if two users reconnect (walk away then return), their previous conversation is preserved.</p>
+
+    <h3>8.4 Client-Side Chat State</h3>
+    <pre><code>// Cosmos.jsx state
+const [chats, setChats] = useState(new Map());
+
+// Map structure: peerId → {
+//   peerName: "Alice",
+//   peerColor: "#6366f1",
+//   roomId: "socketA::socketB",
+//   messages: [{ sender, senderColor, content, timestamp }, ...]
+// }</code></pre>
+    <p>Using a Map keyed by peer socket ID allows O(1) operations for adding, removing, and looking up chat conversations.</p>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 9. SOCKET.IO EVENT REFERENCE -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="page-break"></div>
+    <h2 id="socket-events">9. Socket.IO Event Reference</h2>
+
+    <h3>9.1 Client → Server Events</h3>
+    <table>
+      <tr>
+        <th>Event</th>
+        <th>Payload</th>
+        <th>When Emitted</th>
+        <th>Server Action</th>
+      </tr>
+      <tr>
+        <td><code>player:join</code></td>
+        <td><code>{ username, avatarColor }</code></td>
+        <td>After socket connects, immediately on Cosmos mount</td>
+        <td>Creates player in memory &amp; DB, broadcasts to others, sends current state back</td>
+      </tr>
+      <tr>
+        <td><code>player:move</code></td>
+        <td><code>{ x, y }</code></td>
+        <td>Every ~33ms while user is moving (throttled)</td>
+        <td>Updates in-memory position, broadcasts to others, runs proximity check</td>
+      </tr>
+      <tr>
+        <td><code>chat:message</code></td>
+        <td><code>{ roomId, content }</code></td>
+        <td>When user sends a chat message</td>
+        <td>Persists to MongoDB, broadcasts to the room</td>
+      </tr>
+    </table>
+
+    <h3>9.2 Server → Client Events</h3>
+    <table>
+      <tr>
+        <th>Event</th>
+        <th>Payload</th>
+        <th>Recipient</th>
+        <th>Client Action</th>
+      </tr>
+      <tr>
+        <td><code>player:current</code></td>
+        <td><code>{ [socketId]: playerData }</code></td>
+        <td>Joining player only</td>
+        <td>Creates all existing avatars on canvas, sets own position</td>
+      </tr>
+      <tr>
+        <td><code>player:joined</code></td>
+        <td><code>{ socketId, username, avatarColor, x, y }</code></td>
+        <td>All except joiner</td>
+        <td>Creates new avatar sprite on canvas</td>
+      </tr>
+      <tr>
+        <td><code>player:moved</code></td>
+        <td><code>{ socketId, x, y }</code></td>
+        <td>All except mover</td>
+        <td>Updates avatar position on canvas</td>
+      </tr>
+      <tr>
+        <td><code>player:left</code></td>
+        <td><code>{ socketId }</code></td>
+        <td>All remaining</td>
+        <td>Removes avatar from canvas, decrements player count</td>
+      </tr>
+      <tr>
+        <td><code>chat:connected</code></td>
+        <td><code>{ peerId, peerName, peerColor, roomId, history[] }</code></td>
+        <td>Both players in pair</td>
+        <td>Adds peer to chats Map, shows ChatPanel with history</td>
+      </tr>
+      <tr>
+        <td><code>chat:disconnected</code></td>
+        <td><code>{ peerId, roomId }</code></td>
+        <td>Both players in pair</td>
+        <td>Removes peer from chats Map, hides ChatPanel if empty</td>
+      </tr>
+      <tr>
+        <td><code>chat:message</code></td>
+        <td><code>{ sender, senderColor, content, roomId, timestamp }</code></td>
+        <td>All in room</td>
+        <td>Appends message to the correct chat's messages array</td>
+      </tr>
+    </table>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 10. DATABASE SCHEMA -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="page-break"></div>
+    <h2 id="database">10. Database Schema &amp; Design</h2>
+
+    <h3>10.1 Users Collection</h3>
+    <pre><code>// server/models/User.js
+{
+  _id: ObjectId,
+  username: { type: String, required: true, unique: true, trim: true },
+  avatarColor: { type: String, default: '#6366f1' },
+  lastPosition: {
+    x: { type: Number, default: 400 },
+    y: { type: Number, default: 300 }
+  },
+  lastActive: { type: Date, default: Date.now },
+  createdAt: Date,   // auto (timestamps: true)
+  updatedAt: Date    // auto (timestamps: true)
+}</code></pre>
+    <p><strong>Purpose:</strong> Persists user profiles across sessions. Tracks the last known position and activity time. Uses upsert on join, so returning users are updated rather than duplicated.</p>
+
+    <h3>10.2 Messages Collection</h3>
+    <pre><code>// server/models/Message.js
+{
+  _id: ObjectId,
+  sender: { type: String, required: true },
+  senderColor: { type: String, default: '#6366f1' },
+  content: { type: String, required: true },
+  roomId: { type: String, required: true, index: true },
+  timestamp: { type: Date, default: Date.now }
+}</code></pre>
+    <p><strong>Purpose:</strong> Persists all chat messages. The <code>roomId</code> field is indexed for fast history lookups when users reconnect. Messages are queried with <code>.sort({ timestamp: -1 }).limit(50)</code> and reversed for chronological order.</p>
+
+    <h3>10.3 Graceful Degradation</h3>
+    <div class="info-box orange no-break">
+      <div class="box-title">MongoDB is Optional</div>
+      <p>The server catches MongoDB connection errors and logs a warning. If MongoDB is unavailable,
+      the app still works fully — movement, proximity detection, and real-time chat all function.
+      Only message persistence and user profile storage are affected.</p>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 11. USER FLOW -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="page-break"></div>
+    <h2 id="userflow">11. User Experience Flow</h2>
+
+    <div class="flow-step no-break">
+      <div class="flow-num">1</div>
+      <div class="flow-content">
+        <h4>Open the Application</h4>
+        <p>User navigates to <code>http://localhost:5173</code>. The Join Screen loads with a dark cosmos theme.</p>
+      </div>
+    </div>
+    <div class="flow-step no-break">
+      <div class="flow-num">2</div>
+      <div class="flow-content">
+        <h4>Enter Username</h4>
+        <p>User types their name. An avatar preview updates in real-time showing their assigned color and initial. They click "Enter Cosmos".</p>
+      </div>
+    </div>
+    <div class="flow-step no-break">
+      <div class="flow-num">3</div>
+      <div class="flow-content">
+        <h4>Spawn in the Cosmos</h4>
+        <p>Socket connects. User appears at a random position in the 2000×1000 world. They see the star field, grid, their avatar with a proximity ring, and the HUD showing stats.</p>
+      </div>
+    </div>
+    <div class="flow-step no-break">
+      <div class="flow-num">4</div>
+      <div class="flow-content">
+        <h4>See Other Users</h4>
+        <p>All online players are visible as colored circles with names. Their positions update in real-time as they move. The player count in the HUD reflects current occupancy.</p>
+      </div>
+    </div>
+    <div class="flow-step no-break">
+      <div class="flow-num">5</div>
+      <div class="flow-content">
+        <h4>Move Around</h4>
+        <p>Using WASD or Arrow keys, the user navigates the cosmos. The camera smoothly follows. Movement is clamped to world bounds. The position coordinates update in the HUD.</p>
+      </div>
+    </div>
+    <div class="flow-step no-break">
+      <div class="flow-num">6</div>
+      <div class="flow-content">
+        <h4>Approach Another User → Chat Connects</h4>
+        <p>When the distance to another player drops below 150px, the chat panel slides in from the right. It shows "Connected with [name]" and loads any previous message history. The connections count in the HUD increments.</p>
+      </div>
+    </div>
+    <div class="flow-step no-break">
+      <div class="flow-num">7</div>
+      <div class="flow-content">
+        <h4>Chat in Real-Time</h4>
+        <p>Users can type messages. Messages appear as styled bubbles — own messages on the right (indigo), peer messages on the left (gray). All messages have timestamps.</p>
+      </div>
+    </div>
+    <div class="flow-step no-break">
+      <div class="flow-num">8</div>
+      <div class="flow-content">
+        <h4>Move Away → Chat Disconnects</h4>
+        <p>When the user moves beyond 150px from the peer, the chat connection is terminated. The peer's tab disappears from the chat panel. If no connections remain, the chat panel hides entirely.</p>
+      </div>
+    </div>
+    <div class="flow-step no-break">
+      <div class="flow-num">9</div>
+      <div class="flow-content">
+        <h4>Multiple Connections</h4>
+        <p>If the user is near multiple people simultaneously, the chat panel shows tabs for each connection, allowing switching between conversations.</p>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 12. UI/UX DESIGN -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <h2 id="ui">12. UI/UX Design Decisions</h2>
+
+    <h3>12.1 Visual Theme</h3>
+    <table>
+      <tr><th>Element</th><th>Value</th><th>Reasoning</th></tr>
+      <tr><td>Background</td><td><code>#0f0f1a</code> (near-black with blue tint)</td><td>Creates a "space" atmosphere befitting the cosmos theme</td></tr>
+      <tr><td>Panels</td><td><code>#1a1a2e</code> with <code>backdrop-blur</code></td><td>Glassmorphism effect — visible but non-obstructive</td></tr>
+      <tr><td>Borders</td><td><code>#2a2a4a</code></td><td>Subtle separation without harsh contrast</td></tr>
+      <tr><td>Primary</td><td>Indigo (<code>#6366f1</code>)</td><td>Modern, professional, excellent contrast on dark backgrounds</td></tr>
+      <tr><td>Font</td><td>Inter</td><td>Clean, geometric sans-serif optimized for screen readability</td></tr>
+      <tr><td>Corners</td><td><code>rounded-xl</code> / <code>rounded-2xl</code></td><td>Soft, friendly, modern aesthetic</td></tr>
+    </table>
+
+    <h3>12.2 Key UX Principles</h3>
+    <ul>
+      <li><strong>Minimal friction:</strong> One input (username) to enter. No registration or login required.</li>
+      <li><strong>Clear affordances:</strong> Control hints always visible. Proximity ring shows detection zone.</li>
+      <li><strong>Non-intrusive HUD:</strong> Stats visible but don't obstruct gameplay. <code>pointer-events-none</code> prevents accidental clicks.</li>
+      <li><strong>Automatic behavior:</strong> Chat connects/disconnects automatically — no manual action needed.</li>
+      <li><strong>Visual feedback:</strong> Green pulse dots for "online" status. Animated elements for active connections.</li>
+      <li><strong>Responsive:</strong> Canvas and UI resize with the window. Panels use fixed positioning.</li>
+    </ul>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 13. SETUP INSTRUCTIONS -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div class="page-break"></div>
+    <h2 id="setup">13. Setup &amp; Running Instructions</h2>
+
+    <h3>13.1 Prerequisites</h3>
+    <ul>
+      <li><strong>Node.js</strong> version 18 or higher</li>
+      <li><strong>npm</strong> (included with Node.js)</li>
+      <li><strong>MongoDB</strong> — local installation or MongoDB Atlas cloud (optional — app works without it)</li>
+    </ul>
+
+    <h3>13.2 Installation</h3>
+    <pre><code># Clone the repository
+git clone &lt;repository-url&gt;
+cd virtual-cosmos
+
+# Install all dependencies (server + client)
+npm run install:all</code></pre>
+
+    <h3>13.3 Configuration</h3>
+    <p>Edit <code>server/.env</code> to configure:</p>
+    <pre><code>PORT=3001                              # Server port
+MONGODB_URI=mongodb://localhost:27017/virtual-cosmos  # MongoDB URI
+CLIENT_URL=http://localhost:5173       # Frontend URL for CORS</code></pre>
+
+    <h3>13.4 Running in Development</h3>
+    <pre><code># Option A: Two terminals
+# Terminal 1 - Start the backend
+cd server && npm run dev
+
+# Terminal 2 - Start the frontend
+cd client && npm run dev
+
+# Option B: Single command (from root)
+npm run dev</code></pre>
+
+    <h3>13.5 Testing the Application</h3>
+    <ol>
+      <li>Open <strong>http://localhost:5173</strong> in your browser</li>
+      <li>Enter a username (e.g., "Alice") and click "Enter Cosmos"</li>
+      <li>Open another browser tab (or use incognito/different browser)</li>
+      <li>Enter a different username (e.g., "Bob")</li>
+      <li>Use WASD/Arrow keys to move both avatars close together</li>
+      <li>When they're within 150px — the chat panel appears on both screens</li>
+      <li>Send messages back and forth</li>
+      <li>Move one avatar away — the chat panel disappears</li>
+    </ol>
+
+    <h3>13.6 Building for Production</h3>
+    <pre><code># Build the frontend
+npm run build
+
+# The output is in client/dist/ — serve with any static file server
+# The backend runs as-is with: cd server && npm start</code></pre>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 14. CONFIGURATION REFERENCE -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <h2 id="config">14. Configuration Reference</h2>
+
+    <h3>14.1 Client Configuration (<code>client/src/constants.js</code>)</h3>
+    <table>
+      <tr><th>Constant</th><th>Default</th><th>Unit</th><th>Description</th></tr>
+      <tr><td><code>WORLD_WIDTH</code></td><td>2000</td><td>px</td><td>Total width of the explorable cosmos</td></tr>
+      <tr><td><code>WORLD_HEIGHT</code></td><td>1000</td><td>px</td><td>Total height of the explorable cosmos</td></tr>
+      <tr><td><code>MOVE_SPEED</code></td><td>4</td><td>px/frame</td><td>Player movement speed (at 60fps = 240px/sec)</td></tr>
+      <tr><td><code>PROXIMITY_RADIUS</code></td><td>150</td><td>px</td><td>Visual display radius on client</td></tr>
+      <tr><td><code>AVATAR_RADIUS</code></td><td>22</td><td>px</td><td>Size of the avatar circle</td></tr>
+    </table>
+
+    <h3>14.2 Server Configuration (<code>server/index.js</code>)</h3>
+    <table>
+      <tr><th>Variable</th><th>Default</th><th>Description</th></tr>
+      <tr><td><code>PROXIMITY_RADIUS</code></td><td>150</td><td>Server-side detection radius (must match client)</td></tr>
+      <tr><td><code>PORT</code></td><td>3001</td><td>Server listening port (from .env)</td></tr>
+      <tr><td><code>MONGODB_URI</code></td><td>mongodb://localhost:27017/virtual-cosmos</td><td>Database connection string</td></tr>
+    </table>
+
+    <div class="info-box orange no-break">
+      <div class="box-title">Important: Radius Sync</div>
+      <p>The <code>PROXIMITY_RADIUS</code> value must be the same on both client and server. The client uses
+      it for the visual ring; the server uses it for the actual detection. If they differ, the visual
+      feedback will not match the actual connection behavior.</p>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- 15. SECURITY -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <h2 id="security">15. Security Considerations</h2>
+
+    <table>
+      <tr><th>Concern</th><th>How Addressed</th></tr>
+      <tr>
+        <td><strong>Server-side proximity</strong></td>
+        <td>Proximity detection runs on the server, not the client. Users cannot fake being near someone to force a chat connection.</td>
+      </tr>
+      <tr>
+        <td><strong>CORS</strong></td>
+        <td>Socket.IO and Express are configured to only accept connections from the specified client URL.</td>
+      </tr>
+      <tr>
+        <td><strong>Input validation</strong></td>
+        <td>Chat messages are trimmed and checked for empty content before being saved or broadcast. Username is trimmed and limited to 20 characters on the client.</td>
+      </tr>
+      <tr>
+        <td><strong>Room isolation</strong></td>
+        <td>Chat messages are only sent to the specific Socket.IO room. A player cannot receive messages from rooms they haven't been added to by the server.</td>
+      </tr>
+      <tr>
+        <td><strong>Position bounds</strong></td>
+        <td>Client-side position clamping prevents users from moving outside the world. Server could add server-side validation for additional security.</td>
+      </tr>
+      <tr>
+        <td><strong>Environment variables</strong></td>
+        <td>Database credentials and configuration stored in .env, excluded from git via .gitignore.</td>
+      </tr>
+    </table>
+
+    <div class="separator"></div>
+
+    <div class="footer">
+      <p><strong>Virtual Cosmos</strong> — 2D Proximity-Based Virtual Environment</p>
+      <p>Built with React + PixiJS + Socket.IO + Node.js + MongoDB</p>
+      <p style="margin-top: 8px;">Document generated April 2026</p>
+    </div>
+
+  </div>
+</body>
+</html>
